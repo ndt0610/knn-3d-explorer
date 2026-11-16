@@ -27,8 +27,8 @@ def classify_knn(data1, data2, target, k):
 class KNN3DManualApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("KNN 3D - Phân tích chi tiết với Bảng khoảng cách")
-        self.root.geometry("1200x700")
+        self.root.title("k-NN 3D — Phân loại và giải thích")
+        self.root.geometry("1420x760")
 
         # --- CHIA GIAO DIỆN THÀNH 2 CỘT ---
         # Cột trái: Nhập liệu và Bảng kết quả
@@ -61,7 +61,7 @@ class KNN3DManualApp:
 
         ttk.Label(control_frame, text="Điểm xét (x,y,z):").pack(side=tk.LEFT)
         self.entry_target = ttk.Entry(control_frame, width=15)
-        self.entry_target.insert(0, "4, 5, 6")
+        self.entry_target.insert(0, "2.5, 3.5, 4.5")
         self.entry_target.pack(side=tk.LEFT, padx=5)
 
         ttk.Label(control_frame, text="Bán kính (R):").pack(side=tk.LEFT, padx=10)
@@ -74,14 +74,18 @@ class KNN3DManualApp:
         self.spin_k.set(3)
         self.spin_k.pack(side=tk.LEFT)
 
-        btn_run = ttk.Button(left_frame, text=">>> TÍNH TOÁN & VẼ <<<", command=self.process_data)
+        btn_run = ttk.Button(left_frame, text="Phân loại điểm và cập nhật biểu đồ", command=self.process_data)
         btn_run.pack(fill=tk.X, pady=5)
 
         # === 2. BẢNG KẾT QUẢ (Cột trái - Bên dưới) ===
         ttk.Label(left_frame, text="Bảng xếp hạng khoảng cách (Gần -> Xa):").pack(pady=5, anchor="w")
 
         columns = ("rank", "type", "coords", "dist", "status")
-        self.tree = ttk.Treeview(left_frame, columns=columns, show="headings", height=15)
+        table_frame = ttk.Frame(left_frame)
+        table_frame.pack(fill=tk.X, pady=2)
+        self.tree = ttk.Treeview(table_frame, columns=columns, show="headings", height=6)
+        table_scrollbar = ttk.Scrollbar(table_frame, orient=tk.VERTICAL, command=self.tree.yview)
+        self.tree.configure(yscrollcommand=table_scrollbar.set)
 
         self.tree.heading("rank", text="#")
         self.tree.column("rank", width=30, anchor="center")
@@ -94,7 +98,8 @@ class KNN3DManualApp:
         self.tree.heading("status", text="Trạng thái")
         self.tree.column("status", width=80)
 
-        self.tree.pack(fill=tk.BOTH, expand=True)
+        self.tree.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        table_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
         # Nhãn kết luận
         self.lbl_result = ttk.Label(left_frame, text="Dự đoán: ...", font=("Arial", 12, "bold"), foreground="blue")
@@ -271,4 +276,5 @@ class KNN3DManualApp:
 if __name__ == "__main__":
     root = tk.Tk()
     app = KNN3DManualApp(root)
+    app.process_data()
     root.mainloop()

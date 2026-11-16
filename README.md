@@ -1,28 +1,30 @@
 # 3D k-NN Explorer
 
-An interactive Streamlit tool for inspecting k-nearest-neighbor classification on user-entered three-dimensional points.
+A small **Tkinter desktop demo** of k-nearest-neighbor classification on editable 3D points. It shows how each observation is ranked by Euclidean distance and how the selected *k* neighbors vote for the query point.
 
-## What it demonstrates
+![Tkinter interface with two point groups, query coordinates, k setting, distance ranking and 3D scatter plot.](docs/images/knn-3d-classification.png)
 
-- Euclidean distance ranking in three dimensions.
-- Majority voting among the selected k nearest points.
-- A deterministic tie rule.
-- A Plotly 3D view of labeled points, the query, and a separate radius sphere.
+*The screenshot uses the built-in points, query `(2.5, 3.5, 4.5)`, and `k = 3`. The nearest three points all belong to Class 1; the green table rows and 3D plot show the same result.*
 
-The radius control is a visualization aid. It does not change the k-NN prediction, which is based only on the nearest k examples.
+## What the demo makes visible
 
-## Run
+- Add or edit coordinates for two labeled point groups.
+- Rank every sample by Euclidean distance to the query point.
+- Predict from the nearest *k* samples; ties follow the nearest selected neighbor.
+- Inspect the points, query, radius sphere and in-sphere connections in the 3D plot.
 
-    python -m pip install -r requirements.txt
-    streamlit run knn_3d_manual_app.py
+The radius is a visualization aid only; it does not change the k-NN vote.
 
-The default dataset has six points, k=3, and query (4, 5, 6). Every supplied row must contain exactly three finite numeric coordinates.
+## Run locally
 
-## Check
+```bash
+python -m pip install -r requirements.txt
+python knn_3d_manual_app.py
+```
 
-    python -m unittest discover -s tests -v
+## Project files
 
-- knn_3d_manual_app.py — input validation, distance calculation, prediction, and chart.
-- tests/test_knn.py — nearest-neighbor, tie, and input validation checks.
+- `knn_3d_manual_app.py` — Tkinter controls, distance table and Matplotlib 3D view.
+- `tests/` — checks for nearest-neighbor ranking and tie behavior.
 
-This is an algorithm illustration on a tiny manual dataset, not a measured classification benchmark.
+This is a small learning demo. Its default points are hand-authored examples, not a trained financial model or evidence of general classification accuracy.
